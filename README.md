@@ -310,7 +310,8 @@ interface CreateTaskInput {
 ---
 
 ## 🖼️ Screenshots
-<img width="1470" height="956" alt="Screenshot 2026-01-06 at 23 43 37" src="https://github.com/user-attachments/assets/66e3d009-e6fc-480b-9e99-d036665a1a5e" />
+
+<img width="736" height="398" alt="Screenshot 2026-01-06 at 23 47 42" src="https://github.com/user-attachments/assets/3e63a049-d161-4274-97f6-7d336b419760" />
 
 **Savinda Jayasekara**
 
