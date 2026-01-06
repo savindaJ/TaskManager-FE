@@ -17,17 +17,23 @@ import { useTaskStore } from "@/src/store";
 import { KanbanColumn } from "./KanbanColumn";
 import { TaskCard } from "./TaskCard";
 import { TaskModal } from "./TaskModal";
-import { Loader2, Plus, RefreshCw } from "lucide-react";
+import { TaskViewModal } from "./TaskViewModal";
+import { Loader2, Plus, RefreshCw, ChevronDown } from "lucide-react";
 
 export function KanbanBoard() {
   const {
     tasks,
     isLoading,
+    isLoadingMore,
     error,
     fetchTasks,
+    loadMoreTasks,
     updateTaskStatus,
     openModal,
     isModalOpen,
+    isViewModalOpen,
+    pagination,
+    hasMoreTasks,
   } = useTaskStore();
 
   const [activeTask, setActiveTask] = useState<Task | null>(null);
@@ -108,7 +114,7 @@ export function KanbanBoard() {
     );
   }
 
-  if (error) {
+  if (error && tasks.length === 0) {
     return (
       <div className="flex h-[60vh] items-center justify-center">
         <div className="flex flex-col items-center gap-4 text-center">
@@ -138,11 +144,19 @@ export function KanbanBoard() {
           </p>
         </div>
         <div className="flex items-center gap-3">
+          {/* Task Count */}
+          <div className="hidden items-center gap-2 rounded-lg bg-zinc-100 px-3 py-2 text-sm text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400 sm:flex">
+            <span className="font-medium">{tasks.length}</span>
+            <span>of</span>
+            <span className="font-medium">{pagination.total}</span>
+            <span>tasks</span>
+          </div>
           <button
             onClick={() => fetchTasks()}
-            className="flex items-center gap-2 rounded-lg border border-zinc-200 bg-white px-4 py-2 text-zinc-600 transition-colors hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+            disabled={isLoading}
+            className="flex items-center gap-2 rounded-lg border border-zinc-200 bg-white px-4 py-2 text-zinc-600 transition-colors hover:bg-zinc-50 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
           >
-            <RefreshCw className="h-4 w-4" />
+            <RefreshCw className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`} />
             Refresh
           </button>
           <button
@@ -179,9 +193,49 @@ export function KanbanBoard() {
         </DragOverlay>
       </DndContext>
 
+      {/* Load More Section */}
+      {hasMoreTasks() && (
+        <div className="mt-6 flex flex-col items-center gap-2">
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            Showing {tasks.length} of {pagination.total} tasks (Page{" "}
+            {pagination.page} of {pagination.totalPages})
+          </p>
+          <button
+            onClick={loadMoreTasks}
+            disabled={isLoadingMore}
+            className="flex items-center gap-2 rounded-lg border border-zinc-200 bg-white px-6 py-2.5 font-medium text-zinc-700 transition-colors hover:bg-zinc-50 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+          >
+            {isLoadingMore ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Loading...
+              </>
+            ) : (
+              <>
+                <ChevronDown className="h-4 w-4" />
+                Load More Tasks
+              </>
+            )}
+          </button>
+        </div>
+      )}
+
+      {/* All Tasks Loaded Message */}
+      {!hasMoreTasks() && tasks.length > 0 && pagination.total > TASKS_PER_PAGE && (
+        <div className="mt-6 text-center">
+          <p className="text-sm text-zinc-400 dark:text-zinc-500">
+            ✓ All {pagination.total} tasks loaded
+          </p>
+        </div>
+      )}
+
       {/* Task Modal */}
       {isModalOpen && <TaskModal />}
+
+      {/* Task View Modal */}
+      {isViewModalOpen && <TaskViewModal />}
     </div>
   );
 }
 
+const TASKS_PER_PAGE = 12;

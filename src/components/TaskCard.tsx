@@ -18,7 +18,7 @@ const priorityConfig: Record<TaskPriority, { color: string; label: string }> = {
 };
 
 export function TaskCard({ task }: TaskCardProps) {
-  const { openModal, deleteTask } = useTaskStore();
+  const { openModal, deleteTask, openViewModal } = useTaskStore();
 
   const {
     attributes,
@@ -41,6 +41,13 @@ export function TaskCard({ task }: TaskCardProps) {
   };
 
   const priority = priorityConfig[task.priority];
+
+  const handleCardClick = () => {
+    // Only open view modal if not dragging
+    if (!isDragging) {
+      openViewModal(task);
+    }
+  };
 
   const handleEdit = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -84,6 +91,7 @@ export function TaskCard({ task }: TaskCardProps) {
       style={style}
       {...attributes}
       {...listeners}
+      onClick={handleCardClick}
       className="group relative cursor-grab rounded-xl border border-zinc-200 bg-white p-4 shadow-sm transition-all hover:shadow-md active:cursor-grabbing active:shadow-lg dark:border-zinc-700 dark:bg-zinc-800"
     >
       {/* Drag Handle Indicator */}
