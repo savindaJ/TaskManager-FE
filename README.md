@@ -316,7 +316,7 @@ interface CreateTaskInput {
 **Savinda Jayasekara**
 
 - GitHub: [@savindaJ](https://github.com/savindaJ)
-- LinkedIn: [Savinda Jayasekara](https://linkedin.com/in/savindajayasekara)
+- LinkedIn: [Savinda Jayasekara]([https://linkedin.com/in/savindajayasekara](https://www.linkedin.com/in/savinda-jayasekara-b81446191/))
 
 ---
 
