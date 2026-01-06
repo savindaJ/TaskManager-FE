@@ -44,14 +44,21 @@ export function TaskCard({ task }: TaskCardProps) {
 
   const handleEdit = (e: React.MouseEvent) => {
     e.stopPropagation();
+    e.preventDefault();
     openModal("edit", task);
   };
 
   const handleDelete = async (e: React.MouseEvent) => {
     e.stopPropagation();
+    e.preventDefault();
     if (confirm("Are you sure you want to delete this task?")) {
       await deleteTask(task.id);
     }
+  };
+
+  // Prevent drag when interacting with buttons
+  const handlePointerDown = (e: React.PointerEvent) => {
+    e.stopPropagation();
   };
 
   const formatDate = (date: string) => {
@@ -75,27 +82,27 @@ export function TaskCard({ task }: TaskCardProps) {
     <div
       ref={setNodeRef}
       style={style}
-      className="group relative rounded-xl border border-zinc-200 bg-white p-4 shadow-sm transition-all hover:shadow-md dark:border-zinc-700 dark:bg-zinc-800"
+      {...attributes}
+      {...listeners}
+      className="group relative cursor-grab rounded-xl border border-zinc-200 bg-white p-4 shadow-sm transition-all hover:shadow-md active:cursor-grabbing active:shadow-lg dark:border-zinc-700 dark:bg-zinc-800"
     >
-      {/* Drag Handle */}
-      <button
-        {...attributes}
-        {...listeners}
-        className="absolute left-2 top-1/2 -translate-y-1/2 cursor-grab opacity-0 transition-opacity group-hover:opacity-100 active:cursor-grabbing"
-      >
+      {/* Drag Handle Indicator */}
+      <div className="absolute left-2 top-1/2 -translate-y-1/2 opacity-0 transition-opacity group-hover:opacity-100">
         <GripVertical className="h-5 w-5 text-zinc-400" />
-      </button>
+      </div>
 
       {/* Actions */}
-      <div className="absolute right-2 top-2 flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
+      <div className="absolute right-2 top-2 z-10 flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
         <button
           onClick={handleEdit}
+          onPointerDown={handlePointerDown}
           className="rounded-lg p-1.5 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-700"
         >
           <Pencil className="h-4 w-4" />
         </button>
         <button
           onClick={handleDelete}
+          onPointerDown={handlePointerDown}
           className="rounded-lg p-1.5 text-zinc-400 hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-900/20"
         >
           <Trash2 className="h-4 w-4" />
@@ -158,4 +165,3 @@ export function TaskCard({ task }: TaskCardProps) {
     </div>
   );
 }
-

@@ -31,7 +31,7 @@ export function KanbanColumn({ column, tasks }: KanbanColumnProps) {
   };
 
   return (
-    <div className="flex h-full w-80 flex-shrink-0 flex-col rounded-2xl bg-zinc-50 dark:bg-zinc-900">
+    <div className="flex h-full w-80 flex-col rounded-2xl bg-zinc-50 dark:bg-zinc-900">
       {/* Column Header */}
       <div className="flex items-center justify-between p-4">
         <div className="flex items-center gap-3">
