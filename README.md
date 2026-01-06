@@ -310,8 +310,6 @@ interface CreateTaskInput {
 ---
 
 ## 🖼️ Screenshots
-
-### Kanban Board (Light Mode)
 <img width="1470" height="956" alt="Screenshot 2026-01-06 at 23 43 37" src="https://github.com/user-attachments/assets/66e3d009-e6fc-480b-9e99-d036665a1a5e" />
 
 **Savinda Jayasekara**
